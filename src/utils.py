@@ -42,7 +42,11 @@ def process_pdf(pdf_path: str, embedding_model: str = "sentence-transformers/all
         chunks = text_splitter.split_documents(documents)
         
         # Step 3: Create embeddings and vector store
-        embeddings = HuggingFaceEmbeddings(model_name=embedding_model)
+        embeddings = HuggingFaceEmbeddings(
+            model_name=embedding_model,
+            model_kwargs={'device': 'cpu'},
+            encode_kwargs={'normalize_embeddings': True}
+        )
 
         vector_store = FAISS.from_documents(chunks, embeddings)
         
